@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Baccarat – Tham gia Telegram để chơi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1e;--panel:#111a33;--panel2:#0e1630;--acc:#4cc9f0;--win:#25d366;--lose:#ff4757;--tie:#ffd166;--chip:#1f2a4d;
+      --text:#e6ecff;--muted:#98a2b3;--shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:"Outfit",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(1000px 600px at 20% -10%,#172347 0%,#0a0f1e 60%),radial-gradient(800px 500px at 120% 10%,#0f1b3b 0%,transparent 50%);color:var(--text)}
+    .app{max-width:1200px;margin:0 auto;padding:20px;}
+    header{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#4cc9f0 0%,#a855f7 100%);box-shadow:var(--shadow)}
+    h1{font-size:22px;margin:0;font-weight:800;letter-spacing:.3px}
+    .balance{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--panel),var(--panel2));padding:10px 14px;border-radius:14px;box-shadow:var(--shadow)}
+    .balance .amount{font-size:18px;font-weight:700}
+    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#0b1430;color:var(--muted);border:1px solid #24315c}
+
+    .table{position:relative;display:grid;grid-template-columns:1.2fr .6fr 1.2fr;gap:16px;margin-top:14px}
+    .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid #1c2852;border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .section-title h2{margin:0;font-size:14px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#b9c2d3}
+
+    /* Betting Areas */
+    .bet-areas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .bet-card{position:relative;padding:14px;border-radius:18px;border:1px solid #23315d;background:linear-gradient(160deg,#0f1733,#0a0f1e 60%);cursor:pointer;transition:.25s;min-height:92px}
+    .bet-card:hover{transform:translateY(-2px);border-color:#2f437e}
+    .bet-card.active{outline:2px solid var(--acc);box-shadow:0 0 0 6px rgba(76,201,240,.08)}
+    .bet-name{font-weight:800;letter-spacing:.5px;font-size:15px}
+    .bet-odds{font-size:12px;color:var(--muted)}
+    .tag{position:absolute;top:10px;right:10px;font-size:11px;padding:4px 8px;border-radius:999px;background:#0e1a3d;border:1px solid #213067;color:#a1b2d6}
+    .player{--c:#4cc9f0}
+    .banker{--c:#ff6b6b}
+    .tie{--c:#ffd166}
+    .bet-card .bet-name{color:var(--c)}
+
+    /* Cards Area */
+    .cards-wrap{display:flex;gap:8px;justify-content:center;align-items:center;min-height:160px}
+    .slot{width:92%;margin:0 auto}
+    .hand{display:flex;gap:14px;justify-content:center}
+    .card{width:74px;height:104px;border-radius:12px;background:linear-gradient(#fff,#f0f3ff);border:1px solid #d7def2;box-shadow:0 12px 30px rgba(0,0,0,.25);position:relative;transform-style:preserve-3d;transform:rotateY(0);transition:transform .6s ease}
+    .card.back{background:linear-gradient(135deg,#1e2a56,#0f1635);border:1px solid #2b3b78}
+    .card.flip{transform:rotateY(180deg)}
+    .pip{position:absolute;inset:8px;border-radius:9px;border:1px dashed #cbd5e9;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;color:#1d2a57}
+    .card .small{position:absolute;top:6px;left:8px;font-size:12px;color:#1d2a57;font-weight:800}
+
+    .center{display:flex;align-items:center;justify-content:center}
+
+    /* Controls */
+    .controls{display:grid;grid-template-columns:1fr;gap:12px}
+    .chips{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{padding:10px 14px;border-radius:999px;border:1px solid #2a3a73;background:linear-gradient(180deg,#121c3e,#0b1330);box-shadow:var(--shadow);cursor:pointer;font-weight:700}
+    .chip:hover{transform:translateY(-1px)}
+    .btn{background:linear-gradient(135deg,#4cc9f0,#a855f7);border:none;color:#0a0f1e;padding:12px 16px;border-radius:14px;font-weight:900;letter-spacing:.6px;cursor:pointer;box-shadow:0 12px 30px rgba(82,143,236,.3)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .ghost{background:#0b1430;color:#c3cff1;border:1px solid #253463}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* History */
+    .history{display:flex;flex-wrap:wrap;gap:6px}
+    .dot{width:16px;height:16px;border-radius:999px;border:1px solid #23315d}
+    .dot.P{background:#4cc9f0}
+    .dot.B{background:#ff6b6b}
+    .dot.T{background:#ffd166}
+
+    /* Gate Overlay */
+    .gate{position:fixed;inset:0;background:radial-gradient(900px 500px at 50% -10%,#182555 0%,rgba(10,15,30,.96) 60%);display:flex;align-items:center;justify-content:center;z-index:9999}
+    .gate-card{width:min(560px,92%);background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid #243160;border-radius:24px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.55);text-align:center}
+    .tg-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#25a4e0,#4cc9f0);color:#001129;padding:14px 18px;border:none;border-radius:16px;font-weight:900;letter-spacing:.6px;cursor:pointer;box-shadow:0 20px 40px rgba(76,201,240,.35)}
+    .tg-btn img{width:20px;height:20px}
+    .sub{color:#a7b2cc;font-size:14px}
+
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0b1430;border:1px solid #253463;color:#cfe1ff;padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s}
+    .toast.show{opacity:1}
+
+    @media (max-width:900px){
+      .table{grid-template-columns:1fr}
+      .slot{width:100%}
+      .card{width:64px;height:92px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h1>Baccarat</h1>
+          <div class="pill">Demo client – Chỉ cần nhấn “Tham gia Telegram” để mở khóa</div>
+        </div>
+      </div>
+      <div class="balance">
+        <span>Số dư:</span>
+        <span class="amount" id="balance">0</span>
+        <button class="chip ghost" id="addFunds">+ Nạp 10.000</button>
+      </div>
+    </header>
+
+    <div class="table">
+      <!-- LEFT: PLAYER -->
+      <div class="panel">
+        <div class="section-title">
+          <h2>Người chơi (Player)</h2>
+          <div class="tag player">x1.00</div>
+        </div>
+        <div class="cards-wrap">
+          <div class="slot">
+            <div class="hand" id="playerHand"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: BET & CONTROLS -->
+      <div class="panel">
+        <div class="section-title">
+          <h2>Đặt cược</h2>
+          <div class="tag">Cược tối đa 50.000</div>
+        </div>
+        <div class="bet-areas">
+          <div class="bet-card player" data-bet="player">
+            <div class="bet-name">PLAYER</div>
+            <div class="bet-odds">Trả 1:1</div>
+          </div>
+          <div class="bet-card tie" data-bet="tie">
+            <div class="bet-name">TIE</div>
+            <div class="bet-odds">Trả 8:1</div>
+          </div>
+          <div class="bet-card banker" data-bet="banker">
+            <div class="bet-name">BANKER</div>
+            <div class="bet-odds">Trả 0.95:1</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div class="chips">
+            <button class="chip" data-chip="100">100</button>
+            <button class="chip" data-chip="500">500</button>
+            <button class="chip" data-chip="1000">1.000</button>
+            <button class="chip" data-chip="5000">5.000</button>
+            <button class="chip" data-chip="10000">10.000</button>
+            <button class="chip" data-chip="50000">50.000</button>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="chip ghost" id="clearBet">Xóa cược</button>
+            <button class="btn" id="dealBtn">Chia bài</button>
+          </div>
+          <div class="pill" id="currentBet">Cược: 0 vào —</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: BANKER -->
+      <div class="panel">
+        <div class="section-title">
+          <h2>Nhà cái (Banker)</h2>
+          <div class="tag banker">x0.95</div>
+        </div>
+        <div class="cards-wrap">
+          <div class="slot">
+            <div class="hand" id="bankerHand"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="section-title">
+        <h2>Lịch sử ván</h2>
+        <div class="pill" id="lastResult">—</div>
+      </div>
+      <div class="history" id="history"></div>
+    </div>
+  </div>
+
+  <!-- Gate Overlay -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <h2 style="margin:0 0 8px 0;font-size:26px">Vào nhóm Telegram để chơi</h2>
+      <p class="sub" style="margin:0 0 16px 0">Yêu cầu: Chỉ cần <b>nhấn nút dưới</b> để mở nhóm <b>@htuanpremium0</b>. Hệ thống sẽ mở khóa ngay – <u>không cần xác nhận</u>.</p>
+      <button class="tg-btn" id="joinBtn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="tg">
+        Tham gia Telegram
+      </button>
+      <p class="sub" style="margin-top:10px">Liên kết: https://t.me/htuanpremium0</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Đã mở khóa! Chúc bạn may mắn 🍀</div>
+
+  <script>
+    // ===== Utils =====
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+    const fmt = n => n.toLocaleString('vi-VN');
+
+    // Persistent State
+    const STORAGE_KEYS = { joined:'tg_joined', balance:'balance', history:'history' };
+
+    function showToast(msg){
+      const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 1800);
+    }
+
+    function secureRand(max){
+      const arr = new Uint32Array(1); crypto.getRandomValues(arr);
+      return arr[0] % max;
+    }
+
+    // Deck & Baccarat helpers
+    const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    function cardValue(rank){
+      if(rank==='A') return 1; if(['10','J','Q','K'].includes(rank)) return 0; return parseInt(rank,10);
+    }
+    function drawCard(){ return RANKS[secureRand(RANKS.length)]; }
+    function handTotal(hand){ return (hand.map(cardValue).reduce((a,b)=>a+b,0)) % 10; }
+
+    function needPlayerThirdCard(playerTotal){ return playerTotal <= 5; }
+    function bankerDraws(bankerTotal, playerStood, playerThird){
+      if(playerStood){ return bankerTotal <= 5; }
+      // Player drew a third card -> full banker rule
+      const pt = cardValue(playerThird);
+      if(bankerTotal <= 2) return true;
+      if(bankerTotal === 3) return pt !== 8;
+      if(bankerTotal === 4) return pt >= 2 && pt <= 7;
+      if(bankerTotal === 5) return pt >= 4 && pt <= 7;
+      if(bankerTotal === 6) return pt >= 6 && pt <= 7;
+      return false; // 7 stand, 8-9 handled earlier
+    }
+
+    // UI State
+    let balance = parseInt(localStorage.getItem(STORAGE_KEYS.balance) || '10000',10);
+    let currentBet = { type:null, amount:0 };
+
+    // Init UI
+    $('#balance').textContent = fmt(balance);
+
+    // Gate logic – unlock on click (no extra confirmation)
+    function unlockGate(){
+      localStorage.setItem(STORAGE_KEYS.joined,'1');
+      $('#gate').style.display='none';
+      showToast('Đã mở khóa! Chúc bạn may mắn 🍀');
+    }
+    $('#joinBtn').addEventListener('click',()=>{
+      window.open('https://t.me/htuanpremium0','_blank');
+      unlockGate();
+    });
+
+    // Auto-hide gate if already joined
+    if(localStorage.getItem(STORAGE_KEYS.joined)==='1'){
+      $('#gate').style.display='none';
+    }
+
+    // Bet selection
+    $$('.bet-card').forEach(card=>{
+      card.addEventListener('click',()=>{
+        $$('.bet-card').forEach(c=>c.classList.remove('active'));
+        card.classList.add('active');
+        currentBet.type = card.dataset.bet; updateBetPill();
+      });
+    });
+
+    // Chips
+    $$('.chip[data-chip]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const v = parseInt(btn.dataset.chip,10);
+        const maxBet = 50000;
+        currentBet.amount = Math.min(maxBet, currentBet.amount + v);
+        updateBetPill();
+      });
+    });
+    $('#clearBet').addEventListener('click',()=>{ currentBet.amount = 0; updateBetPill(); });
+
+    function updateBetPill(){
+      const name = currentBet.type ? (currentBet.type==='player'?'PLAYER':currentBet.type==='banker'?'BANKER':'TIE') : '—';
+      $('#currentBet').textContent = `Cược: ${fmt(currentBet.amount)} vào ${name}`;
+    }
+
+    // Add funds (demo)
+    $('#addFunds').addEventListener('click',()=>{
+      balance += 10000; persistBalance(); showToast('+10.000');
+    });
+
+    function persistBalance(){ localStorage.setItem(STORAGE_KEYS.balance,String(balance)); $('#balance').textContent = fmt(balance); }
+
+    // Deal flow
+    $('#dealBtn').addEventListener('click',()=>{
+      if(!currentBet.type || currentBet.amount<=0){ return showToast('Chọn cửa và số tiền!'); }
+      if(balance < currentBet.amount){ return showToast('Số dư không đủ'); }
+      balance -= currentBet.amount; persistBalance();
+      playRound();
+    });
+
+    function makeCardEl(rank){
+      const el = document.createElement('div'); el.className='card back';
+      const pip = document.createElement('div'); pip.className='pip'; pip.textContent = rank; el.appendChild(pip);
+      const sm = document.createElement('div'); sm.className='small'; sm.textContent = rank; el.appendChild(sm);
+      setTimeout(()=>{ el.classList.remove('back'); }, 300); // reveal animation
+      return el;
+    }
+
+    function clearHands(){ $('#playerHand').innerHTML=''; $('#bankerHand').innerHTML=''; }
+
+    function appendHistory(mark){
+      const box = document.createElement('div'); box.className = `dot ${mark}`; $('#history').prepend(box);
+      while($('#history').children.length>50){ $('#history').lastChild.remove(); }
+    }
+
+    function setLastResult(text, color){ const el=$('#lastResult'); el.textContent=text; el.style.color=color; }
+
+    function payout(result){
+      const amt = currentBet.amount; const bet = currentBet.type;
+      let won = 0;
+      if(result==='P' && bet==='player') won = amt * 2; // 1:1 plus stake
+      if(result==='B' && bet==='banker') won = Math.floor(amt + amt*0.95); // 0.95:1 plus stake
+      if(result==='T' && bet==='tie') won = amt * 9; // 8:1 plus stake
+      balance += won; persistBalance();
+    }
+
+    function playRound(){
+      clearHands();
+      const player = [drawCard(), drawCard()];
+      const banker = [drawCard(), drawCard()];
+
+      // Render initial
+      player.forEach(r=>$('#playerHand').appendChild(makeCardEl(r)));
+      banker.forEach(r=>$('#bankerHand').appendChild(makeCardEl(r)));
+
+      let pt = handTotal(player), bt = handTotal(banker);
+
+      // Naturals
+      if(pt>=8 || bt>=8){
+        finishRound(player, banker);
+        return;
+      }
+
+      // Player third card rule
+      let playerThird = null;
+      if(needPlayerThirdCard(pt)){
+        playerThird = drawCard(); player.push(playerThird);
+        setTimeout(()=>$('#playerHand').appendChild(makeCardEl(playerThird)), 350);
+        pt = handTotal(player);
+      }
+
+      // Banker rule
+      let bankerThird = null;
+      if(bankerDraws(bt, playerThird===null, playerThird)){
+        bankerThird = drawCard(); banker.push(bankerThird);
+        setTimeout(()=>$('#bankerHand').appendChild(makeCardEl(bankerThird)), 700);
+        bt = handTotal(banker);
+      }
+
+      setTimeout(()=>finishRound(player, banker), 1100);
+    }
+
+    function finishRound(player, banker){
+      const pt = handTotal(player), bt = handTotal(banker);
+      let result, text, color;
+      if(pt>bt){ result='P'; text=`PLAYER thắng (${pt} vs ${bt})`; color='var(--win)'; }
+      else if(bt>pt){ result='B'; text=`BANKER thắng (${bt} vs ${pt})`; color='#ff9aa2'; }
+      else { result='T'; text=`HÒA (${pt})`; color='var(--tie)'; }
+
+      setLastResult(text, color);
+      payout(result);
+      appendHistory(result);
+
+      // Reset current bet amount (giữ cửa để chơi nhanh)
+      currentBet.amount = 0; updateBetPill();
+    }
+
+    // Restore history if any
+    (function(){
+      const his = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
+      his.forEach(m=>appendHistory(m));
+    })();
+
+    // Intercept history append to persist
+    const historyBox = $('#history');
+    const obs = new MutationObserver(()=>{
+      const marks = Array.from(historyBox.children).map(el=>el.className.split(' ').pop());
+      localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(marks));
+    });
+    obs.observe(historyBox,{childList:true});
+  </script>
+</body>
+</html>
